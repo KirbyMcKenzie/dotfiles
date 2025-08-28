@@ -26,3 +26,7 @@ export NVM_DIR="$HOME/.nvm"
 if [ -f .ruby-version ]; then
     rvm use
 fi
+
+if [ -z "$GITHUB_SPRINGCARE_TOKEN" ] && [ -n "$GITHUB_TOKEN" ]; then
+  export GITHUB_SPRINGCARE_TOKEN="$GITHUB_TOKEN"
+fi
