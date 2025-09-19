@@ -1,23 +1,24 @@
-#!/bin/bash
+#!/bin/zsh
 
 parse_git_branch() {
     git branch 2>/dev/null | sed -n -e 's/^\* \(.*\)/(\1)/p'
 }
 
-alias git-s='git status'
 
-COLOR_DEF='\[\e[0m\]'
-COLOR_USR='\[\e[38;5;243m\]'
-COLOR_DIR='\[\e[38;5;197m\]'
-COLOR_GIT='\[\e[38;5;39m\]'
+# Zsh uses %{ %} instead of \[ \] for non-printing characters
+COLOR_DEF='%{\e[0m%}'
+COLOR_USR='%{\e[38;5;243m%}'
+COLOR_DIR='%{\e[38;5;197m%}'
+COLOR_GIT='%{\e[38;5;39m%}'
 
 if [ -n "$CODESPACES" ]; then
   PROMPT_USER="@kirby's codespace"
 else
-  PROMPT_USER="\u"
+  PROMPT_USER="%n"  # %n is zsh equivalent of \u for username
 fi
 
-export PS1="${COLOR_USR}${PROMPT_USER} ${COLOR_DIR}\w ${COLOR_GIT}\$(parse_git_branch)${COLOR_DEF} \$ "
+# Zsh prompt with proper escaping and %w for current directory
+export PS1="${COLOR_USR}${PROMPT_USER} ${COLOR_DIR}%~ ${COLOR_GIT}\$(parse_git_branch)${COLOR_DEF} %# "
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # loads nvm
